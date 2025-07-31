@@ -1,43 +1,27 @@
 package org.example;
 
-
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-
-
-public class Main {
-
-    static Logger logger1 = LoggerFactory.getLogger(Main.class);
-
+public class FacilityServiceCode {
     public static void main(String[] args) throws Exception {
 
-        String tableName = "facility_desease_code";
-        String tableNameOld = "facility_desease_code_old";
+        String tableName = "facility_service_code";
+        String tableNameOld = "facility_service_code_old";
 
         SparkSession spark = SparkSession.builder()
                 .appName("ExcelToIcebergSpark")
@@ -62,21 +46,9 @@ public class Main {
         // Đọc Excel vào danh sách Java
         List<Row> data = new ArrayList<>();
         StructType schema = new StructType()
-                .add("stt", DataTypes.StringType)
-                .add("chapter_code", DataTypes.StringType)
-                .add("chapter_name_en", DataTypes.StringType)
-                .add("chapter_name_vn", DataTypes.StringType)
-                .add("group_code", DataTypes.StringType)
-                .add("group_name_en", DataTypes.StringType)
-                .add("group_name_vn", DataTypes.StringType)
-                .add("type_code", DataTypes.StringType)
-                .add("type_name_en", DataTypes.StringType)
-                .add("type_name_vn", DataTypes.StringType)
-                .add("sick_code", DataTypes.StringType)
-                .add("sick_code_v2", DataTypes.StringType)
-                .add("sick_name_en", DataTypes.StringType)
-                .add("sick_name_vn", DataTypes.StringType);
-        File xmlFile = new File("C:\\Users\\phamv\\Desktop\\Gtel\\data\\facility_desease_code_202507302223.xml");
+                .add("code", DataTypes.StringType)
+                .add("description", DataTypes.StringType);
+        File xmlFile = new File("C:\\Users\\phamv\\Desktop\\Gtel\\data\\facility_service_code_202507302324.xml");
         if (!xmlFile.exists()) {
             System.out.println("File không tồn tại!");
             return;
@@ -92,20 +64,8 @@ public class Main {
         for (int i = 0; i < list.getLength(); i++) {
             Node row = list.item(i);
             List<String> values = new ArrayList<>();
-            values.add(getText(row, "stt"));
-            values.add(getText(row, "chapter_code"));
-            values.add(getText(row, "chapter_name_en"));
-            values.add(getText(row, "chapter_name_vn"));
-            values.add(getText(row, "group_code"));
-            values.add(getText(row, "group_name_en"));
-            values.add(getText(row, "group_name_vn"));
-            values.add(getText(row, "type_code"));
-            values.add(getText(row, "type_name_en"));
-            values.add(getText(row, "type_name_vn"));
-            values.add(getText(row, "sick_code"));
-            values.add(getText(row, "sick_code_v2"));
-            values.add(getText(row, "sick_name_en"));
-            values.add(getText(row, "sick_name_vn"));
+            values.add(getText(row, "code"));
+            values.add(getText(row, "description"));
             data.add(RowFactory.create(values.toArray()));
         }
 
@@ -118,20 +78,8 @@ public class Main {
         spark.sql("CREATE DATABASE IF NOT EXISTS iceberg.db_3179");
         spark.sql("DROP TABLE IF EXISTS iceberg.db_3179."+tableNameOld);
         spark.sql("CREATE TABLE IF NOT EXISTS iceberg.db_3179."+tableName+" (\n" +
-                "    stt STRING,\n" +
-                "    chapter_code STRING,\n" +
-                "    chapter_name_en STRING,\n" +
-                "    chapter_name_vn STRING,\n" +
-                "    group_code STRING,\n" +
-                "    group_name_en STRING,\n" +
-                "    group_name_vn STRING,\n" +
-                "    type_code STRING,\n" +
-                "    type_name_en STRING,\n" +
-                "    type_name_vn STRING,\n" +
-                "    sick_code STRING,\n" +
-                "    sick_code_v2 STRING,\n" +
-                "    sick_name_en STRING,\n" +
-                "    sick_name_vn STRING\n" +
+                "    code STRING,\n" +
+                "    description STRING\n" +
                 ")\n" +
                 "USING iceberg\n" +
                 "TBLPROPERTIES (\n" +
@@ -163,6 +111,4 @@ public class Main {
         }
         return "";
     }
-
-
 }
