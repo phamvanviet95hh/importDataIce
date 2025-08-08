@@ -17,11 +17,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FaciltyTreatmentResultCode {
+public class FacilityDeseaseCode {
     public static void main(String[] args) throws Exception {
 
-        String tableName = "facilty_treatment_result_code";
-        String tableNameOld = "facilty_treatment_result_code_old";
+        String tableName = "facility_desease_code";
+        String tableNameOld = "facility_desease_code_old";
 
         SparkSession spark = SparkSession.builder()
                 .appName("ExcelToIcebergSpark")
@@ -46,9 +46,21 @@ public class FaciltyTreatmentResultCode {
         // Đọc Excel vào danh sách Java
         List<Row> data = new ArrayList<>();
         StructType schema = new StructType()
-                .add("code", DataTypes.StringType)
-                .add("description", DataTypes.StringType);
-        File xmlFile = new File("E:\\app-msc\\gmedical\\29\\facilty_treatment_result_code_202508081125.xml");
+                .add("stt", DataTypes.StringType)
+                .add("chapter_code", DataTypes.StringType)
+                .add("chapter_name_en", DataTypes.StringType)
+                .add("chapter_name_vn", DataTypes.StringType)
+                .add("group_code", DataTypes.StringType)
+                .add("group_name_en", DataTypes.StringType)
+                .add("group_name_vn", DataTypes.StringType)
+                .add("type_code", DataTypes.StringType)
+                .add("type_name_en", DataTypes.StringType)
+                .add("type_name_vn", DataTypes.StringType)
+                .add("sick_code", DataTypes.StringType)
+                .add("sick_code_v2", DataTypes.StringType)
+                .add("sick_name_en", DataTypes.StringType)
+                .add("sick_name_vn", DataTypes.StringType);
+        File xmlFile = new File("E:\\app-msc\\gmedical\\29\\facility_desease_code_202508081129.xml");
         if (!xmlFile.exists()) {
             System.out.println("File không tồn tại!");
             return;
@@ -64,8 +76,20 @@ public class FaciltyTreatmentResultCode {
         for (int i = 0; i < list.getLength(); i++) {
             Node row = list.item(i);
             List<String> values = new ArrayList<>();
-            values.add(getText(row, "code"));
-            values.add(getText(row, "description"));
+            values.add(getText(row, "stt"));
+            values.add(getText(row, "chapter_code"));
+            values.add(getText(row, "chapter_name_en"));
+            values.add(getText(row, "chapter_name_vn"));
+            values.add(getText(row, "group_code"));
+            values.add(getText(row, "group_name_en"));
+            values.add(getText(row, "group_name_vn"));
+            values.add(getText(row, "type_code"));
+            values.add(getText(row, "type_name_en"));
+            values.add(getText(row, "type_name_vn"));
+            values.add(getText(row, "sick_code"));
+            values.add(getText(row, "sick_code_v2"));
+            values.add(getText(row, "sick_name_en"));
+            values.add(getText(row, "sick_name_vn"));
             data.add(RowFactory.create(values.toArray()));
         }
 
@@ -78,8 +102,20 @@ public class FaciltyTreatmentResultCode {
         spark.sql("CREATE DATABASE IF NOT EXISTS iceberg.db_3179");
         spark.sql("DROP TABLE IF EXISTS iceberg.db_3179."+tableNameOld);
         spark.sql("CREATE TABLE IF NOT EXISTS iceberg.db_3179."+tableName+" (\n" +
-                "    code STRING,\n" +
-                "    description STRING\n" +
+                "    stt STRING,\n" +
+                "    chapter_code STRING,\n" +
+                "    chapter_name_en STRING,\n" +
+                "    chapter_name_vn STRING,\n" +
+                "    group_code STRING,\n" +
+                "    group_name_en STRING,\n" +
+                "    group_name_vn STRING,\n" +
+                "    type_code STRING,\n" +
+                "    type_name_en STRING,\n" +
+                "    type_name_vn STRING,\n" +
+                "    sick_code STRING,\n" +
+                "    sick_code_v2 STRING,\n" +
+                "    sick_name_en STRING,\n" +
+                "    sick_name_vn STRING\n" +
                 ")\n" +
                 "USING iceberg\n" +
                 "TBLPROPERTIES (\n" +

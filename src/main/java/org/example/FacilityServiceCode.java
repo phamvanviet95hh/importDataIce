@@ -36,8 +36,8 @@ public class FacilityServiceCode {
                 .config("spark.sql.catalog.iceberg.warehouse", "s3://warehouse")
                 .config("spark.sql.catalog.iceberg.s3.endpoint", "http://10.6.8.29:9000")
                 .config("spark.sql.catalog.iceberg.s3.path-style-access", "true")
-                .config("spark.sql.catalog.iceberg.s3.access-key-id", "FMTpf4g2jJtGvCzDpWYE")
-                .config("spark.sql.catalog.iceberg.s3.secret-access-key", "h1DUi2MPDeoLJ0jFTxX7Nzc4x0mqmcgLHcPR9SSQ")
+                .config("spark.sql.catalog.iceberg.s3.access-key-id", "pFt4lvYRBaKgUnEpB7Cr")
+                .config("spark.sql.catalog.iceberg.s3.secret-access-key", "svE59joRKg9w4lMJbRCdyTLXd5u6QXxGU4OAraFF")
                 .config("spark.sql.catalog.iceberg.s3.region", "us-east-1")
                 .config("spark.shuffle.push.enabled", "false")  // tắt tính năng gây lỗi!
                 .getOrCreate();
@@ -48,7 +48,7 @@ public class FacilityServiceCode {
         StructType schema = new StructType()
                 .add("code", DataTypes.StringType)
                 .add("description", DataTypes.StringType);
-        File xmlFile = new File("C:\\Users\\phamv\\Desktop\\Gtel\\data\\facility_service_code_202507302324.xml");
+        File xmlFile = new File("E:\\app-msc\\gmedical\\29\\facility_service_code_202508081123.xml");
         if (!xmlFile.exists()) {
             System.out.println("File không tồn tại!");
             return;
@@ -83,12 +83,13 @@ public class FacilityServiceCode {
                 ")\n" +
                 "USING iceberg\n" +
                 "TBLPROPERTIES (\n" +
-                "    'write.metadata.delete-after-commit.enabled' = 'true',\n" +
-                "    'write.metadata.previous-versions-max' = '1',\n" +
-                "    'write.metadata.auto-merge.enabled' = 'false',\n" +
-                "    'write.parquet.compression-codec' = 'uncompressed',\n" +
-                "    'format-version' = '2',\n" +
-                "    'write.format.default' = 'parquet'\n" +
+                "  'format-version' = '2',\n" +
+                "  'write.format.default' = 'parquet',\n" +
+                "  'write.parquet.compression-codec' = 'zstd',\n" +
+                "  'write.ordering' = 'soCccd, uuid, createdAt',\n" +
+                "  'write.metadata.auto-merge.enabled' = 'false',\n" +
+                "  'write.metadata.delete-after-commit.enabled' = 'true',\n" +
+                "  'write.metadata.previous-versions-max' = '1'\n" +
                 ")");
 
 
