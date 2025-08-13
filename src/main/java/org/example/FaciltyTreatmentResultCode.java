@@ -36,8 +36,8 @@ public class FaciltyTreatmentResultCode {
                 .config("spark.sql.catalog.iceberg.warehouse", "s3://warehouse")
                 .config("spark.sql.catalog.iceberg.s3.endpoint", "http://10.6.8.29:9000")
                 .config("spark.sql.catalog.iceberg.s3.path-style-access", "true")
-                .config("spark.sql.catalog.iceberg.s3.access-key-id", "pFt4lvYRBaKgUnEpB7Cr")
-                .config("spark.sql.catalog.iceberg.s3.secret-access-key", "svE59joRKg9w4lMJbRCdyTLXd5u6QXxGU4OAraFF")
+                .config("spark.sql.catalog.iceberg.s3.access-key-id", "NQbyMUVSv4sYrTEtsHB8")
+                .config("spark.sql.catalog.iceberg.s3.secret-access-key", "Wp4A9AroTCPEKKnipcpGvCMrRajXEZbnBDkap9y0")
                 .config("spark.sql.catalog.iceberg.s3.region", "us-east-1")
                 .config("spark.shuffle.push.enabled", "false")  // tắt tính năng gây lỗi!
                 .getOrCreate();
